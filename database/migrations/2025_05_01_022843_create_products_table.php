@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('product_name');
-            $table->string('product_name');
+            $table->string('productName');
             $table->string('unit_price');
             $table->string('product_image');
-            $table->enum('ststus', ['active', 'inactive'])->default('active');
-            $table->foreignId('id')->constrained('category')->onDelete('cascade'); //'cascade' eken wenne 
+            $table->enum('status',['active', 'inactive'])->default('active');
+            $table->foreignId('id')->constrained('categories')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

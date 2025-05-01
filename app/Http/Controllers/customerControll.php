@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\customers;
 
 use Illuminate\Http\Request;
 
@@ -11,7 +12,8 @@ class customerControll extends Controller
      */
     public function index()
     {
-        //
+        $customer = customers::all(); 
+        return view("customer.index", compact(var_name:'customer'));
     }
 
     /**
@@ -19,7 +21,7 @@ class customerControll extends Controller
      */
     public function create()
     {
-        //
+        return view("customer.create");
     }
 
     /**
@@ -27,7 +29,16 @@ class customerControll extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([ 
+            
+            'customerName',
+            'Contact'
+        ],
+        );
+        
+
+        customers::create($request->all()); 
+        return redirect()->route(route:'customer.index')->with('success', 'customer Addedd success.');
     }
 
     /**
@@ -35,23 +46,30 @@ class customerControll extends Controller
      */
     public function show(string $id)
     {
-        //
+        $customer = customers::findOrFail($id); 
+        return view('customer.edit', compact(var_name:'customer'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+    
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([ 
+            'id'=>'required',
+            'customerName',
+            'Contact'
+        ],
+        );
+
+        $customer = customers::findOrFail($id);
+        $customer->update($request->all());
+        return redirect()->route(route:'customer.index')->with('success','customer updated successfull');
     }
 
     /**
@@ -59,6 +77,8 @@ class customerControll extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $customer = customers::findOrFail($id);
+        $customer->delete();
+        return redirect()->route(route:'customer.index')->with('success','customer delete success');
     }
 }
