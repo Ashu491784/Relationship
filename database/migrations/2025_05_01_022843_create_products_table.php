@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,16 +13,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+             $table->string('product_no')->unique();
             $table->string('productName');
-            $table->string('unit_price');
-            $table->string('product_image');
+            $table->string('unit_price')->default(0.00);
+            $table->string('product_image')->nullable();
             $table->enum('status',['active', 'inactive'])->default('active');
-            $table->foreignId('id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
 
+            $table->softDeletes();
             $table->timestamps();
         });
-    }
+    }  
+
+  
 
     /**
      * Reverse the migrations.

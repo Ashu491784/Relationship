@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\category;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -12,8 +12,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = category::all(); 
-        return view("category.index", compact(var_name:'category'));
+        $categories = Category::all();
+        return view('category.index',
+            [
+                'categories' => $categories,
+                'formType' => 'add',
+                'category' => ''
+            ]
+        );
     }
 
     /**
@@ -21,7 +27,6 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view("category.create");
     }
 
     /**
@@ -29,15 +34,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([ 
-            
-            'CategoryName'
-        ],
-        );
-        
-
-        category::create($request->all()); 
-        return redirect()->route(route:'category.index')->with('success', 'category Addedd success.');
+        $request->validate([
+            'CategoryName' => 'required'
+        ]);
+        $data = $request->all();
+        Category::create($data);
+        return redirect()->route('category.index')->
+        with('success', 'Category created successfully.');
     }
 
     /**
@@ -53,8 +56,13 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category = category::findOrFail($id); //data tika set wenna field walata
-        return view('category.edit', compact(var_name:'category'));
+        $categories = Category::all();
+        $category = Category::findOrFail($id);
+        return view('category.index', [
+            'categories' => $categories,
+            'formType' => 'edit',
+            'category' => $category
+        ]);
     }
 
     /**
@@ -62,15 +70,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([ 
-            'isbn'=>'required',
-            'CategoryName'
-        ],
-        );
-
-        $category = category::findOrFail($id);
+        $request->validate([
+            'CategoryName' => 'required'
+        ]);
+        $category = Category::findOrFail($id);
         $category->update($request->all());
-        return redirect()->route(route:'category.index')->with('success','category updated successfull');
+        return redirect()->route('category.index')
+            ->with('success', 'Category updated successfully.');
+
     }
 
     /**
@@ -78,7 +85,7 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = category::findOrFail($id);
+        $category = Category::findOrFail($id);
         $category->delete();
         return redirect()->route(route:'category.index')->with('success','category delete success');
     }

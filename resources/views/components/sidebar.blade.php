@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a class="nav-link text-dark hover-bg-primary" href="#">
+                <a class="nav-link text-dark hover-bg-primary" href="{{route('customer.index')}}">
                     <i class="bi bi-people"></i> Customer
                 </a>
             </li>

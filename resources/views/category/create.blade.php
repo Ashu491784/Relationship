@@ -1,9 +1,7 @@
-
-@extends ('layouts.main')
-
-@section('title', 'Add categories')
-
-<form action="{{route('category.store')}}" method="POST">
+<form action="{{route('category.store')}}" method="post">
     @csrf
-    @include('category.form' , ['title'=> 'Add category'])
+    @include('category.categoryform',
+    ['btn'=>'Add Category',
+    'clr'=>'primary']
+    )
 </form>

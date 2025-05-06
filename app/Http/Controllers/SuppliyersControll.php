@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\suppliyers;
 
 class SuppliyersControll extends Controller
 {
@@ -11,7 +12,8 @@ class SuppliyersControll extends Controller
      */
     public function index()
     {
-        //
+        $suppliyers = suppliyers::all();   
+        return view("suppliyers.index", compact(var_name:'suppliyers'));
     }
 
     /**
@@ -19,7 +21,7 @@ class SuppliyersControll extends Controller
      */
     public function create()
     {
-        //
+        return view("suppliyers.create");
     }
 
     /**
@@ -27,7 +29,15 @@ class SuppliyersControll extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([ 
+            
+            'CategoryName'
+        ],
+        );
+        
+
+        suppliyers::create($request->all()); 
+        return redirect()->route(route:'suppliyers.index')->with('success', 'suppliyers Addedd success.');
     }
 
     /**
